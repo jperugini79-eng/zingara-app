@@ -612,14 +612,16 @@ export default function App(){
     <div style={S.app}>
       <div style={S.header}>
         <div style={S.logo}>✦ ZINGARA</div>
-        <nav style={{display:"flex",gap:2}}>{tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={S.navBtn(tab===t.id)}>{t.label}</button>)}</nav>
+        <nav style={{display:"flex",gap:2,flexWrap:"wrap",justifyContent:"flex-end",maxWidth:"calc(100% - 100px)"}}>
+          {tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={S.navBtn(tab===t.id)}>{t.label}</button>)}
+        </nav>
       </div>
       <div style={{display:tab==="carga"?"block":"none"}}><PasoCarga onProductosCargados={onProductosCargados} resetKey={resetKey}/></div>
       <div style={{display:tab==="planilla_edicion"?"block":"none"}}><PasoPlanilla productos={loteActual} setProductos={setLoteActual} onGenerar={onGenerar}/></div>
       <div style={{display:tab==="preview"?"block":"none"}}><PasoPreview key={previewKey} productos={productos} setProductos={setProductos} onPublicar={onPublicar}/></div>
       <div style={{display:tab==="historial"?"block":"none"}}><PasoHistorial publicados={publicados}/></div>
       <div style={{display:tab==="guia"?"block":"none"}}><PasoGuia/></div>
-      <div style={{position:"fixed",bottom:8,right:12,fontSize:10,color:BRAND.muted,opacity:0.8,pointerEvents:"none",letterSpacing:"0.05em"}}>v.1.20</div>
+      <div style={{position:"fixed",bottom:8,right:12,fontSize:10,color:BRAND.muted,opacity:0.8,pointerEvents:"none",letterSpacing:"0.05em"}}>v.1.21</div>
     </div>
   );
 }
