@@ -77,7 +77,7 @@ async function elegirMejorFoto(fotos, nombre, descripcion){
     const imgs=fotos.slice(0,4).map(src=>({type:"image",source:{type:"base64",media_type:"image/jpeg",data:src.split(",")[1]}}));
     const criterio=esConjunto?"Es un CONJUNTO, elegí donde se vea completo.":"Elegí la foto con mejor iluminación, prenda visible, sin cara.";
     const prompt="Tenés "+fotos.length+" fotos de: \""+nombre+"\". "+criterio+" Devolvé SOLO el número (0,1,2,3).";
-    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:10,messages:[{role:"user",content:[...imgs,{type:"text",text:prompt}]}]})});
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":import.meta.env.VITE_ANTHROPIC_API_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:10,messages:[{role:"user",content:[...imgs,{type:"text",text:prompt}]}]})});
     const data=await resp.json();
     const idx=parseInt(data.content&&data.content.find(b=>b.type==="text")&&data.content.find(b=>b.type==="text").text||"0");
     return fotos[isNaN(idx)?0:Math.min(idx,fotos.length-1)];
@@ -302,7 +302,7 @@ function PasoCarga({ onProductosCargados, resetKey }){
       try{
         const imgs=await Promise.all(lote.files.map(async f=>({type:"image",source:{type:"base64",media_type:f.type,data:await imgToBase64(f)}})));
         const prompt="Analizá este mensaje de proveedor de indumentaria argentina. Todas las imágenes son del MISMO producto.\nTexto: "+(lote.texto||"(sin texto)")+"\nReglas:\n- Nombre COMPLETO incluyendo tipo de prenda\n- Colores: incluí TODOS los colores visibles\n- Género: inferilo del tipo de prenda\n- Precio: 0 si no está claro\nDevolvé SOLO JSON sin backticks:\n{\"nombre\":\"\",\"descripcion\":\"\",\"talle\":\"\",\"color\":\"\",\"genero\":\"Mujer|Hombre|Unisex\",\"precioMayorista\":0}";
-        const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,messages:[{role:"user",content:[...imgs,{type:"text",text:prompt}]}]})});
+        const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":import.meta.env.VITE_ANTHROPIC_API_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,messages:[{role:"user",content:[...imgs,{type:"text",text:prompt}]}]})});
         const data=await resp.json();
         if(data.error){errores.push(data.error.message);continue;}
         const raw=data.content&&data.content.find(b=>b.type==="text")&&data.content.find(b=>b.type==="text").text||"";
@@ -420,7 +420,7 @@ function PasoPreview({ productos, setProductos, onPublicar }){
     const precio=precioMin(p.precioMayorista);
     const prompt="Sos community manager de ZINGARA, marca de indumentaria argentina. Tono: moderno, místico, con actitud, elegante. Lenguaje argentino natural.\nProducto: "+p.nombre+" | Desc: "+p.descripcion+" | Colores: "+(p.color||"n/a")+" | Talles: "+(p.talle||"n/a")+" | Precio: "+(precio?"$ "+precio.toLocaleString("es-AR"):"consultar")+" | Género: "+p.genero+"\nDevolvé SOLO JSON sin backticks:\n{\"gancho\":\"frase impactante max 8 palabras\",\"cuerpo\":\"2-3 oraciones atractivas\",\"info\":\"colores talles precio con emojis\",\"cta\":\"llamada a la acción estilo ZINGARA\",\"hashtags\":\"15 hashtags relevantes\"}";
     try{
-      const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:800,messages:[{role:"user",content:prompt}]})});
+      const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":import.meta.env.VITE_ANTHROPIC_API_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:800,messages:[{role:"user",content:prompt}]})});
       const data=await resp.json();
       if(data.error) throw new Error(data.error.message);
       const post=JSON.parse((data.content&&data.content.find(b=>b.type==="text")&&data.content.find(b=>b.type==="text").text||"").replace(/```json|```/g,"").trim());
