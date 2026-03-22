@@ -619,7 +619,7 @@ export default function App(){
       <div style={{display:tab==="preview"?"block":"none"}}><PasoPreview key={previewKey} productos={productos} setProductos={setProductos} onPublicar={onPublicar}/></div>
       <div style={{display:tab==="historial"?"block":"none"}}><PasoHistorial publicados={publicados}/></div>
       <div style={{display:tab==="guia"?"block":"none"}}><PasoGuia/></div>
-      <div style={{position:"fixed",bottom:8,right:12,fontSize:10,color:BRAND.muted,opacity:0.8,pointerEvents:"none",letterSpacing:"0.05em"}}>v.1.17</div>
+      <div style={{position:"fixed",bottom:8,right:12,fontSize:10,color:BRAND.muted,opacity:0.8,pointerEvents:"none",letterSpacing:"0.05em"}}>v.1.20</div>
     </div>
   );
 }
